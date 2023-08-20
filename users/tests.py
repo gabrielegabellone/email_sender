@@ -11,7 +11,7 @@ class UserModelTest(TestCase):
 
     def test_user_to_str(self):
         """Tests that the model is represented in string as expected."""
-        user = User.objects.get(id=1)
+        user = User.objects.get(email='mariorossi@gmail.com')
         actual_repr = str(user)
         expected_repr = 'Mario Rossi'
         self.assertEquals(expected_repr, actual_repr)
@@ -28,8 +28,8 @@ class UserViewsTest(TestCase):
         """Tests the correct response of the endpoint which allows to obtain the list of all users."""
         response = self.client.get('/users/')
         actual_data = response.content
-        expected_data = (b'[{"id":12,"email":"mariorossi@gmail.com","username":"Mario Rossi"},{"id":13,'
-                         b'"email":"lucaverdi@gmail.com","username":"Luca Verdi"},{"id":14,'
+        expected_data = (b'[{"id":36,"email":"mariorossi@gmail.com","username":"Mario Rossi"},{"id":37,'
+                         b'"email":"lucaverdi@gmail.com","username":"Luca Verdi"},{"id":38,'
                          b'"email":"paolobianchi@gmail.com","username":"Paolo Bianchi"}]')
 
         self.assertEqual(200, response.status_code)
@@ -40,7 +40,7 @@ class UserViewsTest(TestCase):
         id_user_to_retrieve = User.objects.get(email='mariorossi@gmail.com').id
         response = self.client.get(f'/users/{id_user_to_retrieve}/')
         actual_data = response.content
-        expected_data = b'{"id":15,"email":"mariorossi@gmail.com","username":"Mario Rossi"}'
+        expected_data = b'{"id":39,"email":"mariorossi@gmail.com","username":"Mario Rossi"}'
 
         self.assertEqual(200, response.status_code)
         self.assertEqual(expected_data, actual_data)
@@ -49,7 +49,7 @@ class UserViewsTest(TestCase):
         """Tests the correct response of the endpoint which allows the creation of a new user."""
         response = self.client.post('/users/', data={'email': 'paologialli@gmail.com', 'username': 'Paolo Gialli'})
         actual_data = response.content
-        expected_data = b'{"id":5,"email":"paologialli@gmail.com","username":"Paolo Gialli"}'
+        expected_data = b'{"id":29,"email":"paologialli@gmail.com","username":"Paolo Gialli"}'
 
         self.assertEqual(201, response.status_code)
         self.assertEqual(expected_data, actual_data)
@@ -70,7 +70,7 @@ class UserViewsTest(TestCase):
         id_user_to_update = User.objects.get(email='mariorossi@gmail.com').id
         response = self.client.put(f'/users/{id_user_to_update}/', data={'email': 'rossi@gmail.com', 'username': 'Mario Rossi'})
         actual_data = response.content
-        expected_data = b'{"id":18,"email":"rossi@gmail.com","username":"Mario Rossi"}'
+        expected_data = b'{"id":42,"email":"rossi@gmail.com","username":"Mario Rossi"}'
 
         self.assertEqual(200, response.status_code)
         self.assertEqual(expected_data, actual_data)

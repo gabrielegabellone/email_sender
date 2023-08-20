@@ -10,7 +10,7 @@ from users.models import User
 class EmailAllUsers(APIView):
     """View for sending emails to all users."""
     def post(self, request):
-        data = request.data
+        data = request.POST
         users = User.objects.all()
         recipient_list = [user.email for user in users]
         subject = data.get('subject', '')
@@ -25,11 +25,13 @@ class EmailAllUsers(APIView):
 class EmailSpecificUsers(APIView):
     """View for sending emails to specific users."""
     def post(self, request):
-        data = request.data
-        ids_users = data.get('recipients', [])
+        data = request.POST
+        ids_users = data.getlist('recipients', [])
+        if not ids_users:
+            return Response({'msg': 'Recipient list required'}, status=400)
+
         recipient_list = []
         users_not_found = []
-
         for id_user in ids_users:
             try:
                 user = User.objects.get(pk=id_user)
