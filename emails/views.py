@@ -4,14 +4,14 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from users.models import User
+from subscribers.models import Subscriber
 
 
-class EmailAllUsers(APIView):
+class EmailAllSubscribers(APIView):
     """View for sending emails to all users."""
     def post(self, request):
         data = request.POST
-        users = User.objects.all()
+        users = Subscriber.objects.all()
         recipient_list = [user.email for user in users]
         subject = data.get('subject', '')
         email_from = settings.EMAIL_HOST_USER
@@ -22,7 +22,7 @@ class EmailAllUsers(APIView):
         return Response({'msg': 'Error sending email'}, status=500)
 
 
-class EmailSpecificUsers(APIView):
+class EmailSpecificSubscribers(APIView):
     """View for sending emails to specific users."""
     def post(self, request):
         data = request.POST
@@ -34,7 +34,7 @@ class EmailSpecificUsers(APIView):
         users_not_found = []
         for id_user in ids_users:
             try:
-                user = User.objects.get(pk=id_user)
+                user = Subscriber.objects.get(pk=id_user)
                 recipient_list.append(user.email)
             except ObjectDoesNotExist:
                 users_not_found.append(id_user)
