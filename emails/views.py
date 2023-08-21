@@ -8,11 +8,11 @@ from subscribers.models import Subscriber
 
 
 class EmailAllSubscribers(APIView):
-    """View for sending emails to all users."""
+    """View for sending emails to all subscribers."""
     def post(self, request):
         data = request.POST
-        users = Subscriber.objects.all()
-        recipient_list = [user.email for user in users]
+        subscribers = Subscriber.objects.all()
+        recipient_list = [subscriber.email for subscriber in subscribers]
         subject = data.get('subject', '')
         email_from = settings.EMAIL_HOST_USER
         message = data.get('message', '')
@@ -23,21 +23,21 @@ class EmailAllSubscribers(APIView):
 
 
 class EmailSpecificSubscribers(APIView):
-    """View for sending emails to specific users."""
+    """View for sending emails to specific subscribers."""
     def post(self, request):
         data = request.POST
-        ids_users = data.getlist('recipients', [])
-        if not ids_users:
+        ids_subscribers = data.getlist('recipients', [])
+        if not ids_subscribers:
             return Response({'msg': 'Recipient list required'}, status=400)
 
         recipient_list = []
-        users_not_found = []
-        for id_user in ids_users:
+        ids_subscribers_not_found = []
+        for id_subscriber in ids_subscribers:
             try:
-                user = Subscriber.objects.get(pk=id_user)
-                recipient_list.append(user.email)
+                subscriber = Subscriber.objects.get(pk=id_subscriber)
+                recipient_list.append(subscriber.email)
             except ObjectDoesNotExist:
-                users_not_found.append(id_user)
+                ids_subscribers_not_found.append(id_subscriber)
 
         subject = data.get('subject', '')
         email_from = settings.EMAIL_HOST_USER
@@ -45,7 +45,7 @@ class EmailSpecificSubscribers(APIView):
         email_sent = send_mail(subject, message, email_from, recipient_list)
 
         if email_sent:
-            if users_not_found:
-                return Response({'msg': f'Emails partially sent, users not found: {users_not_found}'}, status=206)
+            if ids_subscribers_not_found:
+                return Response({'msg': f'Emails partially sent, subscribers not found: {ids_subscribers_not_found}'}, status=206)
             return Response({'msg': 'Emails successfully sent'}, status=200)
         return Response({'msg': 'Error sending email'}, status=500)
