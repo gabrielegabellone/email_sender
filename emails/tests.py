@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.core import mail
 from django.conf import settings
 from rest_framework.test import APIClient
+from django.contrib.auth.models import User
 
 from subscribers.models import Subscriber
 
@@ -18,8 +19,10 @@ class EmailsTestCase(TestCase):
         Subscriber.objects.create(email='mariorossi@gmail.com', username='Mario Rossi')
         Subscriber.objects.create(email='lucaverdi@gmail.com', username='Luca Verdi')
         Subscriber.objects.create(email='paolobianchi@gmail.com', username='Paolo Bianchi')
+        User.objects.create_superuser(username='user', password='pass')
 
         self.client = APIClient()
+        self.client.login(username='user', password='pass')
 
     def test_email_all_subscribers_ok(self):
         """Tests the correct response of the endpoint when sending emails is successful and that the email is sent to

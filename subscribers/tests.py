@@ -1,5 +1,6 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
+from django.contrib.auth.models import User
 
 from .models import Subscriber
 
@@ -22,7 +23,10 @@ class SubscribersViewsTest(TestCase):
         Subscriber.objects.create(email='mariorossi@gmail.com', username='Mario Rossi')
         Subscriber.objects.create(email='lucaverdi@gmail.com', username='Luca Verdi')
         Subscriber.objects.create(email='paolobianchi@gmail.com', username='Paolo Bianchi')
+        User.objects.create_superuser(username='user', password='pass')
+
         self.client = APIClient()
+        self.client.login(username='user', password='pass')
 
     def test_get_subscribers(self):
         """Tests the correct response of the endpoint which allows to obtain the list of all subscribers."""
