@@ -32,8 +32,8 @@ jobs:
       run: |
         python manage.py test
       env: 
-        DBNAME: ${{ secrets.MYSQL_DATABASE }}
-        DBUSER: ${{ secrets.MYSQL_USER }}
-        DBPASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-        DBHOST: 127.0.0.1
-        DBPORT: ${{ secrets.MYSQL_PORT }}
+        MYSQL_DB: ${{ secrets.MYSQL_DATABASE }}
+        MYSQL_USER: ${{ secrets.MYSQL_USER }}
+        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        MYSQL_HOST: 127.0.0.1
+        MYSQL_PORT: ${{ secrets.MYSQL_PORT }}
