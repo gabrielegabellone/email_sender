@@ -28,6 +28,6 @@ Create a .env file and set the following variables:
 - run migrations  
 ```docker-compose run web python manage.py migrate```
 ## API Documentation
-To see the API documentation with swagger UI and test the API go to ```http://localhost:8000/swagger```, or you can go to```http://localhost:8000/swagger.json``` to see it in json format.
+To see the API documentation with swagger UI and test the API go to http://localhost:8000/swagger, or you can go to http://localhost:8000/swagger.json to see it in json format.
 ## Authentication
 Authentication was implemented using the user authentication system provided by Django to manage both authentication and authorizations. To access the API you need to be admin, so the command to create a new superuser is ```python manage.py createsuperuser```.

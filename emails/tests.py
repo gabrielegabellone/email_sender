@@ -90,6 +90,6 @@ class EmailsTestCase(TestCase):
     def test_send_email_to_specific_subscribers_error_sending_email(self, mock_send_mail):
         """Tests the correct response of the endpoint when sending emails fails."""
         mock_send_mail.return_value = 0
-        response = self.client.post('/emails/send_to_all/', data={'recipients': [16], 'subject': 'test_subject', 'message': 'test_message'}, format='json')
+        response = self.client.post('/emails/send/', data={'recipients': [16], 'subject': 'test_subject', 'message': 'test_message'}, format='json')
         self.assertEqual(response.status_code, 500)
         self.assertIn(b'{"msg":"Error sending email"}', response.content)
