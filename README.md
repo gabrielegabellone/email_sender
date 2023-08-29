@@ -1,4 +1,5 @@
 # Email Sender
+![Coverage Badge](./reports/coverage-badge.svg)  
 Project with the aim of learning Django basics.  
 Email sender consists of a web app that allows you to send emails to users in a database, just like a newsletter.  
 I structured the project in two apps:
