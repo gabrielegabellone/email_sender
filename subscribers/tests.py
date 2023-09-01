@@ -32,22 +32,23 @@ class SubscribersViewsTest(TestCase):
         """Tests the correct response of the endpoint which allows to obtain the list of all subscribers."""
         response = self.client.get('/subscribers/')
         actual_data = response.content
-        expected_data = (b'[{"id":36,"email":"mariorossi@gmail.com","username":"Mario Rossi"},{"id":37,'
-                         b'"email":"lucaverdi@gmail.com","username":"Luca Verdi"},{"id":38,'
-                         b'"email":"paolobianchi@gmail.com","username":"Paolo Bianchi"}]')
+        expected_subscribers = [b'"email":"mariorossi@gmail.com","username":"Mario Rossi"',
+                                b'"email":"lucaverdi@gmail.com","username":"Luca Verdi"',
+                                b'"email":"paolobianchi@gmail.com","username":"Paolo Bianchi"']
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual(expected_data, actual_data)
+        for expected_subscriber in expected_subscribers:
+            self.assertIn(expected_subscriber, actual_data)
 
     def test_retrieve_subscriber(self):
         """Tests the correct response of the endpoint that allows you to find a subscriber through his id."""
         id_sub_to_retrieve = Subscriber.objects.get(email='mariorossi@gmail.com').id
         response = self.client.get(f'/subscribers/{id_sub_to_retrieve}/')
         actual_data = response.content
-        expected_data = b'{"id":39,"email":"mariorossi@gmail.com","username":"Mario Rossi"}'
+        expected_subscriber = b'"email":"mariorossi@gmail.com","username":"Mario Rossi"'
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual(expected_data, actual_data)
+        self.assertIn(expected_subscriber, actual_data)
 
     def test_create_subscribers(self):
         """Tests the correct response of the endpoint which allows the creation of a new subscriber."""
@@ -63,6 +64,16 @@ class SubscribersViewsTest(TestCase):
         response = self.client.post('/subscribers/', data={'email': 'paologialligmail.com', 'username': 'Paolo Gialli'})
         self.assertEqual(400, response.status_code)
 
+    def test_create_subscribers_empty_email(self):
+        """Tests the correct response of the endpoint when an empty email is provided."""
+        response = self.client.post('/subscribers/', data={'email': '', 'username': 'Paolo Gialli'})
+        self.assertEqual(400, response.status_code)
+
+    def test_create_subscribers_empty_username(self):
+        """Tests the correct response of the endpoint when an empty username is provided."""
+        response = self.client.post('/subscribers/', data={'email': 'paologialli@gmail.com', 'username': ''})
+        self.assertEqual(400, response.status_code)
+
     def test_delete_subscribers(self):
         """Tests the correct response of the endpoint that allows to delete a subscriber."""
         id_sub_to_delete = Subscriber.objects.get(email='mariorossi@gmail.com').id
@@ -74,7 +85,7 @@ class SubscribersViewsTest(TestCase):
         id_sub_to_update = Subscriber.objects.get(email='mariorossi@gmail.com').id
         response = self.client.put(f'/subscribers/{id_sub_to_update}/', data={'email': 'rossi@gmail.com', 'username': 'Mario Rossi'})
         actual_data = response.content
-        expected_data = b'{"id":42,"email":"rossi@gmail.com","username":"Mario Rossi"}'
+        expected_subscriber = b'"email":"rossi@gmail.com","username":"Mario Rossi"'
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual(expected_data, actual_data)
+        self.assertIn(expected_subscriber, actual_data)

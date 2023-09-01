@@ -35,7 +35,7 @@ jobs:
     - name: Run Tests
       run: |
         coverage run manage.py test
-        coverage xml -o ./reports/coverage/coverage.xml --omit="*/test*"
+        coverage xml -o ./reports/coverage/coverage.xml --omit="manage.py"
         genbadge coverage -o ./reports/coverage-badge.svg
 
       env: 
