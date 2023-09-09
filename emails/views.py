@@ -11,7 +11,6 @@ from subscribers.models import Subscriber
 
 @swagger_auto_schema(
     method='POST',
-    operation_description='Allows the sending of emails to all subscribers.',
     operation_id='send_emails_to_all',
     request_body=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
         'subject': openapi.Schema(type=openapi.TYPE_STRING, description='the subject of the email', default=''),
@@ -37,6 +36,7 @@ from subscribers.models import Subscriber
     })
 @api_view(['POST'])
 def send_email_to_all_subscribers(request):
+    """Allows the sending of emails to all subscribers."""
     data = request.data
     subscribers = Subscriber.objects.all()
     recipient_list = [subscriber.email for subscriber in subscribers]
@@ -51,7 +51,6 @@ def send_email_to_all_subscribers(request):
 
 @swagger_auto_schema(
     method='POST',
-    operation_description='Allows the sending of emails to specific subscribers.',
     operation_id='send_emails_by_subscribers_ids',
     request_body=openapi.Schema(type=openapi.TYPE_OBJECT, properties={
         'recipients': openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Schema(type=openapi.TYPE_INTEGER),
@@ -88,6 +87,7 @@ def send_email_to_all_subscribers(request):
     })
 @api_view(['POST'])
 def send_email_to_specific_subscriber(request):
+    """Allows the sending of emails to specific subscribers."""
     data = request.data
     ids_subscribers = data.get('recipients', [])
     if not ids_subscribers:
